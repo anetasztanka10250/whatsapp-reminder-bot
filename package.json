@@ -1,0 +1,12 @@
+{
+  "name": "bot-przypomnien",
+  "private": true,
+  "scripts": {
+    "start": "node bot.js",
+    "polacz": "node bot.js --polacz"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "7.0.0-rc14",
+    "qrcode-terminal": "0.12.0"
+  }
+}

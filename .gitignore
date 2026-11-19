@@ -1,0 +1,10 @@
+node_modules/
+*.key
+*.pem
+qr.html
+polacz.log
+auth/
+config.json
+stan.json
+log.txt
+tresc.txt

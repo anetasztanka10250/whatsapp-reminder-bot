@@ -1,0 +1,28 @@
+name: Przypominajka
+on:
+  # Harmonogram włącz TYLKO w prywatnym repo (workflow zapisuje do repo klucz sesji WhatsApp):
+  # schedule:
+  #   - cron: '*/20 6-19 * * 1-5'   # UTC; bot sam pilnuje godzin 9–20 czasu polskiego
+  workflow_dispatch: {}            # ręczne uruchomienie z GitHuba
+concurrency: przypominajka          # nigdy dwa uruchomienia naraz (wspólne klucze WhatsApp)
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24   # Baileys 7 to moduł ESM ładowany przez require()
+          cache: npm
+      - run: npm ci
+      - run: node bot.js
+      - name: Zapis stanu i kluczy
+        if: always()
+        run: |
+          git config user.name "przypominajka-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A auth stan.json log.txt tresc.txt
+          git diff --cached --quiet || (git commit -m "stan $(date -u +%FT%TZ)" && git push)
